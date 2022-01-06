@@ -1,16 +1,23 @@
 <!--pages/home/home.wxml-->
+<view class='home'>
+  <view hidden='{{!showTabControl}}'>
+    <w-tab-control class='tab-control-temp' titles="{{titles}}" bind:tabclick="tabClick" />
+  </view>
+  <scroll-view class='content' scroll-y bindscrolltolower="loadMore" scroll-with-animation="true" scroll-top="{{topPosition}}" bindscroll="scrollPosition">
+    <!-- 1.轮播图 -->
+    <w-swiper images="{{banners}}" />
 
-<!-- 1.轮播图 -->
-<w-swiper images="{{banners}}"/>
+    <!-- 2.推荐数据的展示 -->
+    <w-recommend recommends="{{recommends}}" bind:imageLoad="onImageLoad" />
 
-<!-- 2.推荐数据的展示 -->
-<w-recommend recommends="{{recommends}}" bind:imageLoad="onImageLoad"/>
+    <!-- 3.本周流行数据展示 -->
+    <w-feature />
 
-<!-- 3.本周流行数据展示 -->
-<w-feature/>
-
-<w-tab-control class='tab-control' titles="{{titles}}" bind:tabclick="tabClick"/>
-<!-- 商品数据 -->
-<w-goods goodslist="{{goods[currentType].list}}"/>
-<!-- <w-goods wx:if="{{goods[currentType].list.lenght > 0}}" goodslist="{{goods[currentType].list}}"/> -->
-
+    <!-- 4.tab-contrl切换栏 -->
+    <w-tab-control class='tab-control' titles="{{titles}}" bind:tabclick="tabClick" />
+    <!-- 5.商品数据 -->
+    <w-goods goodslist="{{goods[currentType].list}}" />
+    <!-- 6.返回顶部按钮 -->
+    <w-back-top bindtap="onBackTop" wx:if="{{showBackTop}}" />
+  </scroll-view>
+</view>

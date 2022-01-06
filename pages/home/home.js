@@ -9,7 +9,8 @@ import {
 import {
   POP,
   SELL,
-  NEW
+  NEW,
+  BACK_TOP_POSITION
 } from '../../common/const.js'
 Page({
 
@@ -31,6 +32,13 @@ Page({
     },
     // 当前选中的商品类型
     currentType: 'pop',
+    // 顶部位置坐标
+    topPosition: 0,
+    tabControlTop: 0,
+    // 是否显示返回顶部按钮
+    showBackTop: false,
+    // 是否显示切换控制栏
+    showTabControl: false
   },
 
   /**
@@ -39,7 +47,47 @@ Page({
   onLoad: function (options) {
     // 1.请求网络数据
     this._getData()
-    console.log(this.data.goods);
+  },
+  // 加载更多商品数据
+  loadMore() {
+    this._getProductData(this.data.currentType);
+  },
+  scrollPosition(e) {
+    // console.log('开始滚动');
+    // 1.获取滚动的顶部
+    const position = e.detail.scrollTop;
+
+    // 2.设置是否显示
+    this.setData({
+      showBackTop: position > BACK_TOP_POSITION,
+    })
+
+    wx.createSelectorQuery().select('.tab-control').boundingClientRect((rect) => {
+      // 判断高度
+      const show = rect.top > 0
+      this.setData({
+        showTabControl: !show
+      })
+    }).exec()
+  },
+  // 返回顶部按钮点击处理事件
+  onBackTop() {
+    console.log("返回顶部");
+    this.setData({
+      // 隐藏按钮
+      showBackTop: false,
+      topPosition: 0,
+      tabControlTop: 0
+    })
+  },
+  // 当图片加载完成
+  onImageLoad() {
+    console.log("图片加载完成");
+    wx.createSelectorQuery().select('.tab-control').boundingClientRect((rect) => {
+      this.setData({
+        tabControlTop: rect.top
+      })
+    }).exec()
   },
   // 封装所有网络请求的逻辑
   _getData() {
@@ -103,5 +151,11 @@ Page({
     this.setData({
       currentType: currentType
     })
+  },
+
+  // 
+  onReachBottom() {
+    // 上拉加载更多
+    this._getProductData(this.data.currentType)
   }
 })

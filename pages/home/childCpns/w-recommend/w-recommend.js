@@ -22,6 +22,7 @@ Component({
    */
   methods: {
     onImageLoad() {
+      // 向外发送事件
       this.triggerEvent('imageLoad', {}, {})
     }
   }
