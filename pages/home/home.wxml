@@ -12,3 +12,5 @@
 <w-tab-control class='tab-control' titles="{{titles}}" bind:tabclick="tabClick"/>
 <!-- 商品数据 -->
 <w-goods goodslist="{{goods[currentType].list}}"/>
+<!-- <w-goods wx:if="{{goods[currentType].list.lenght > 0}}" goodslist="{{goods[currentType].list}}"/> -->
+
